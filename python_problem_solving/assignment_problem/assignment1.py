@@ -3,7 +3,15 @@ import pandas
 
 store = pandas.read_csv('/home/udhaya/Downloads/store.csv')
 location = pandas.read_csv('/home/udhaya/Downloads/location.csv')
-
+# a. `exercise_1_store.csv` file consists of the following columns:
+#     Store_name - Name of a store
+#      Build_area - Carpet area of the store
+#      Date_of_opening - Date when the store became operational
+#      pincode - Location where store is present
+# b. `exercise_1_location.csv` file consists of the following columns:
+#     Pincode - Postal code of a region
+#     City - Place to which the pincode belongs to
+#     Country - State where the postal code is located
 
 # a. List all stores which have ​ build_area ​ greater than 4000
 
