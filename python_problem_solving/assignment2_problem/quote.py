@@ -2,6 +2,7 @@ import requests as req
 import json
 import time
 import xmltodict as xml
+import datetime
 
 
 def quote_print():
@@ -11,6 +12,12 @@ def quote_print():
         lang = config_file['lang']
         format = config_file['format']
         delay = config_file['delay']
+        time_ = datetime.datetime.strptime(delay, "%H:%M:%S")
+        hour = time_.hour * 60 * 60
+        minute = time_.minute * 60
+        seconds = time_.second
+        delay = hour + minute + seconds
+
         if lang == "en" or lang == "ru":
             if format == "json":
                 extracting_details_using_json(lang, format, delay)
