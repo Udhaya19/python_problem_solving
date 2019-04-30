@@ -2,7 +2,6 @@ import requests as req
 import json
 import time
 import xmltodict as xml
-import datetime
 
 
 def quote_print():
@@ -12,11 +11,21 @@ def quote_print():
         lang = config_file['lang']
         format = config_file['format']
         delay = config_file['delay']
-        time_ = datetime.datetime.strptime(delay, "%H:%M:%S")
-        hour = time_.hour * 60 * 60
-        minute = time_.minute * 60
-        seconds = time_.second
-        delay = hour + minute + seconds
+        delay = delay.split(" ")
+        for value in range(len(delay)):
+            value_store = delay[value][-2:]
+            time_split = int(delay[value][:-2])
+            if value_store == "yr":
+                change_year = time_split * 365 * 24 * 60 * 60
+            if value_store == "mt":
+                change_month = time_split * 24 * 60 * 60
+            if value_store == "dy":
+                change_day = time_split * 60 * 60
+            if value_store == "mi":
+                change_minute = time_split * 60
+            if value_store == "se":
+                seconds = time_split
+        delay = change_year + change_month + change_day + change_minute + seconds
 
         if lang == "en" or lang == "ru":
             if format == "json":
@@ -34,7 +43,10 @@ def quote_print():
 def extracting_details_using_json(lang, format, delay):
     url = "https://api.forismatic.com/api/1.0/?method=getQuote&lang=" + lang + "&format=" + format
     res = req.get(url)
-    quote_dictionary = json.loads(bytes(res.text, "utf-8").decode("unicode_escape"))
+    if lang == "ru":
+        quote_dictionary = json.loads(res.text)
+    if lang == "en":
+        quote_dictionary = json.loads(bytes(res.text, "utf-8").decode("unicode_escape"))
     author_name = quote_dictionary['quoteAuthor']
     author_quote = quote_dictionary['quoteText']
     if author_name == '':
