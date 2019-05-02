@@ -11,21 +11,7 @@ def quote_print():
         lang = config_file['lang']
         format = config_file['format']
         delay = config_file['delay']
-        delay = delay.split(" ")
-        for value in range(len(delay)):
-            value_store = delay[value][-2:]
-            time_split = int(delay[value][:-2])
-            if value_store == "yr":
-                change_year = time_split * 365 * 24 * 60 * 60
-            if value_store == "mt":
-                change_month = time_split * 24 * 60 * 60
-            if value_store == "dy":
-                change_day = time_split * 60 * 60
-            if value_store == "mi":
-                change_minute = time_split * 60
-            if value_store == "se":
-                seconds = time_split
-        delay = change_year + change_month + change_day + change_minute + seconds
+        delay = delay_change_seconds(delay)
 
         if lang == "en" or lang == "ru":
             if format == "json":
@@ -38,6 +24,25 @@ def quote_print():
                 extracting_details_using_json(lang, format, delay)
             else:
                 extracting_details_using_xml(lang, format, delay)
+
+
+def delay_change_seconds(delay):
+    delay = delay.split(" ")
+    for value in range(len(delay)):
+        value_store = delay[value][-2:]
+        time_split = int(delay[value][:-2])
+        if value_store == "yr":
+            change_year = time_split * 365 * 24 * 60 * 60
+        if value_store == "mt":
+            change_month = time_split * 24 * 60 * 60 * 30
+        if value_store == "dy":
+            change_day = time_split * 24 * 60 * 60
+        if value_store == "mi":
+            change_minute = time_split * 60
+        if value_store == "se":
+            seconds = time_split
+    delay = change_year + change_month + change_day + change_minute + seconds
+    return delay
 
 
 def extracting_details_using_json(lang, format, delay):
